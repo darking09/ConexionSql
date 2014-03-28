@@ -4,15 +4,15 @@
 *                                                                                      
 * @author FERNANDO JOSE TORRES BERMUDEZ                                                 
 * @version 1.0                                                                        
-* Correo Electronico; fernandojoset@gmail.com                                                     
+* @copyright (c) 2012, @darkingsoft                                                     
 *                                                                                     
 **/
 class ConexionMysql
 {
-	private $user="root";//usuario
-	private $servidor="localhost";//nombre del servidor
-	private $clave="mafer09";//contraseña del usuario
-	private $base="csi";//base de datos
+	private $user="";//usuario
+	private $servidor="";//nombre del servidor
+	private $clave="";//contraseña del usuario
+	private $base="";//base de datos
 	private $dbd;//manejador de la base de datos
 	private $sql;//cadena de consulta
 	private $manejador;//manejador de la consulta
