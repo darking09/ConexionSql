@@ -9,10 +9,10 @@
 **/
 class ConexionMysql
 {
-	private $user="";//usuario
-	private $servidor="";//nombre del servidor
-	private $clave="";//contraseña del usuario
-	private $base="";//base de datos
+	private $user="root";//usuario
+	private $servidor="localhost";//nombre del servidor
+	private $clave="mafer09";//contraseña del usuario
+	private $base="csi";//base de datos
 	private $dbd;//manejador de la base de datos
 	private $sql;//cadena de consulta
 	private $manejador;//manejador de la consulta
@@ -48,12 +48,13 @@ class ConexionMysql
          */
 	function __destruct()
 	{
-		if($this->dbd)
+            if($this->dbd)
 		mysql_close($this->dbd);
 	}
 
         /**
-         * Funcion que realiza la conexion con la base de datos
+         * Funcion que conecta a la base de datos
+         * @throws Exception cualquier problema con la conexion
          */
 	protected function conecta()
 	{
@@ -76,20 +77,31 @@ class ConexionMysql
 		return false;
 	}
 	
-/**FUNCION PARA REALIZAR QUERYS O CONSULTAS A LA BASE DE DATOS**/
-
-	public function consulta($string)
+        /**
+         * 
+         * @param string $string
+         * @throws Exception
+         *
+         */
+	public function query($from, $data = array('*'),  $where = "", $order = array("var" => "id", "dir" => "ASC"), $limit = '')
 	{
-		try
-		{
-			$this->sql=$string;
-			$this->manejador=mysql_query($this->sql, $this->dbd);
+            $string = '';
+            
+            foreach ($data as $d)
+                $string .= $d.', ';
+            
+            $string = substr($string, 0, -2);
 
-		}catch(Exception $e)
-		{
-			echo "Error ".$e->getCode()."en la linea ".$e->getLine()." : ".$e->getMessage()."<br/>";
-		}
-	}
+            $orderBy = "Order By ".$order['var']." ".$order['dir'];
+            
+            $this->sql = "Select ".$string." From ".$from." ".$orderBy." ".$limit;
+            
+            
+            $this->manejador=mysql_query($this->sql, $this->dbd);
+            
+            if(!$this->manejador)
+                throw new Exception ($this->error (), $this->codigoError ());
+        }
 	
 /**FUNCION PARA EXTRAER LOS DATOS DE LAS CONSULTAS**/
 
@@ -164,7 +176,7 @@ class ConexionMysql
 	
 	
 	public function error(){
-		echo "<br>".mysql_error()."<br>";
+		echo mysql_error();
 	}
 	
 	public function codigoError(){
