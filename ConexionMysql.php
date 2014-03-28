@@ -16,6 +16,9 @@ class ConexionMysql
 	private $dbd;//manejador de la base de datos
 	private $sql;//cadena de consulta
 	private $manejador;//manejador de la consulta
+	/**
+	 * @param ConexionMysql
+	 */
 	public static $_singleton;//variable estatica para realizar llamados fuera de la clase
 
 /** EVITA QUE SE REALICE MAS DE UNA CONEXION**/
