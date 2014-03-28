@@ -17,12 +17,15 @@ class ConexionMysql
 	private $sql;//cadena de consulta
 	private $manejador;//manejador de la consulta
 	/**
-	 * @param ConexionMysql
-	 */
+         *
+         * @var ConexionMysql
+         */
 	public static $_singleton;//variable estatica para realizar llamados fuera de la clase
 
-/** EVITA QUE SE REALICE MAS DE UNA CONEXION**/
-
+        /**
+         * Funcion que revisa si la conexion existe si no la crea
+         * @return ConexionMysql conexion estatica
+         */
 	public static function getInstance()
 	{
 		if (is_null (self::$_singleton))
@@ -32,52 +35,41 @@ class ConexionMysql
 		return self::$_singleton;
 	}
 	
-/** CONSTRUCTOR DE LA CLASE CONEXION**/	
-
+        /**
+         * Construcctor
+         */
 	function __construct()
 	{
 		$this->conecta();
 	}
-	
-	function cerrar()
-	{
-		mysql_close($this->dbd);
-	}
-	
-/**FUNCION DESTRUCTORA DE LA CLASE CONEXION**/
 
+        /**
+         * Destructor
+         */
 	function __destruct()
 	{
 		if($this->dbd)
 		mysql_close($this->dbd);
 	}
 
-/**FUNCION PARA REALIZAR CONEXIONES A LA BASE DE DATOS**/
-
+        /**
+         * Funcion que realiza la conexion con la base de datos
+         */
 	protected function conecta()
 	{
-		try
-		{
-			$this->dbd=@mysql_pconnect($this->servidor,$this->user,$this->clave);
-	
-			if(!$this->dbd)
-			{
-				die("No existe la Conexion con Mysql: ".mysql_errno()." - ".mysql_error()."<br>");
-				
-			}elseif(mysql_select_db($this->base,$this->dbd)==false)
-			{
-				die("No Existe la Conexion con la Base de Datos".mysql_error()."<br>");
-			}
-			
-		}catch(Exception $e)
-		{
-			die("Error ".$e->getCode()."en la linea ".$e->getLine()." : ".$e->getMessage()."<br/>");
-		}
-		
+            
+            $this->dbd=@mysql_pconnect($this->servidor,$this->user,$this->clave);
+
+            if(!$this->dbd)			
+                throw new Exception("No existe la Conexion con Mysql: ".mysql_errno()." - ".mysql_error());				
+            elseif(mysql_select_db($this->base,$this->dbd)==false)            
+                 throw new Exception("No Existe la Conexion con la Base de Datos ".mysql_error());		
 	}
 	
-/**FUNCION PARA COMPROBAR SI HAY O NO CONEXION CON LA BASE DE DATOS**/
-		
+	/**
+         * Funcion que comprueba si existe o no una conexion
+         * @return boolean retorna si ha y o no una conexion
+         */	
 	public function isConexion(){
 		if($this->dbd)
 			return true;
@@ -95,7 +87,7 @@ class ConexionMysql
 
 		}catch(Exception $e)
 		{
-			echo"Error ".$e->getCode()."en la linea ".$e->getLine()." : ".$e->getMessage()."<br/>";
+			echo "Error ".$e->getCode()."en la linea ".$e->getLine()." : ".$e->getMessage()."<br/>";
 		}
 	}
 	
