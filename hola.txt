@@ -1,1 +1,3 @@
-hola amigos
+<?php
+echo "hola amigos";
+?>

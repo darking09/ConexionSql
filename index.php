@@ -1,3 +1,7 @@
+
+//Aqui va el codigo
+//otra linea
+
 <?php
 include_once 'ConexionMysql.php';
 
@@ -15,4 +19,3 @@ if(ConexionMysql::$_singleton->isConexion()):?>
 <?php else: ?>
 <h1>No Hay Conexion</h1>
 <?php endif; ?>
-
